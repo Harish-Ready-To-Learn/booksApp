@@ -41,7 +41,6 @@ function BooksScreen({navigation}) {
     fetchBooks();
   }, []);
   const fetchBooks = async () => {
-    console.log('Fetching books');
     let response = await getBooksList();
     var temp_Arr = response.docs.map(item => {
       item['favorite_flag'] = false;

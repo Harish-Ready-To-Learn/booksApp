@@ -35,21 +35,27 @@ import {
 import {ARROW_ICON} from '../assets';
 import BookListItem from '../components/BookListItem';
 import {getFavoriteList} from '../localStorage/LocalStorage';
+import {useFocusEffect} from '@react-navigation/native';
 
 function FavoriteScreen({navigation}) {
   const [bookList, setBookList] = useState([]);
-  useEffect(() => {
-    fetchBooks();
-  }, []);
+
+  useEffect(() => {}, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchBooks();
+    }, []),
+  );
   const fetchBooks = async () => {
     var oldFavoriteList = await getFavoriteList();
     var temp_Arr = oldFavoriteList.map(item => {
-      item['favorite_flag'] = true;
-      return item;
+      if (item) {
+        item['favorite_flag'] = true;
+        return item;
+      }
     });
     setBookList(temp_Arr);
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <View>
@@ -58,14 +64,18 @@ function FavoriteScreen({navigation}) {
           keyExtractor={(item, index) => index}
           renderItem={({item, index}) => {
             return (
-              <BookListItem
-                title={item.title}
-                authorName={item.author_name[0]}
-                key_id={item.key}
-                index={index}
-                bookList={bookList}
-                favorite_flag={item.favorite_flag}
-              />
+              <>
+                {item && (
+                  <BookListItem
+                    title={item?.title}
+                    authorName={item?.author_name[0]}
+                    key_id={item?.key}
+                    index={index}
+                    bookList={bookList}
+                    favorite_flag={item?.favorite_flag}
+                  />
+                )}
+              </>
             );
           }}
         />

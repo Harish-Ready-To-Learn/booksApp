@@ -31,10 +31,26 @@ const BookDetailsScreen = ({route, navigation}) => {
   };
 
   const onPressFavoriteFlag = async () => {
-    var oldFavoriteList = await getFavoriteList();
-    oldFavoriteList.push(route.params.bookData);
-    var stringfy = await setFavoriteList(oldFavoriteList);
-    setFavoriteFlag(!favoriteFlag);
+    if (favoriteFlag == false) {
+      var oldFavoriteList = await getFavoriteList();
+      var newFavoriteList = oldFavoriteList.map(item => {
+        if (item?.key != route.params.bookData.key) {
+          return item;
+        }
+      });
+      newFavoriteList.push(route.params.bookData);
+      var stringfy = await setFavoriteList(newFavoriteList);
+      setFavoriteFlag(!favoriteFlag);
+    } else {
+      var oldFavoriteListForRemove = await getFavoriteList();
+      var newFavoriteListForRemove = oldFavoriteListForRemove.map(item => {
+        if (item) {
+          if (item.key != route.params.id) return item;
+        }
+      });
+      var stringfy = await setFavoriteList(newFavoriteListForRemove);
+      setFavoriteFlag(!favoriteFlag);
+    }
   };
 
   return (
