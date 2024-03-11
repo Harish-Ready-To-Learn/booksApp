@@ -9,6 +9,7 @@ import {
 import React, {useEffect, useState} from 'react';
 import {getAuthorName, getBookDetails} from '../api';
 import {
+  ICON_TINT_COLOR,
   PRIMARY_BACKGROUND,
   SECONDARY_BACKGROUND,
   TERTIARY_BACKGROUND,
@@ -20,6 +21,8 @@ const BookDetailsScreen = ({route, navigation}) => {
   const [bookDetails, setBookDetails] = useState({});
   const [authorName, setAuthorName] = useState({});
   const [favoriteFlag, setFavoriteFlag] = useState(route.params.favorite_flag);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     fetchBookDetails();
   }, []);
@@ -28,6 +31,7 @@ const BookDetailsScreen = ({route, navigation}) => {
     setBookDetails(response);
     let author_name = await getAuthorName(response.authors[0].author.key);
     setAuthorName(author_name);
+    setLoading(false);
   };
 
   const onPressFavoriteFlag = async () => {
@@ -80,7 +84,7 @@ const BookDetailsScreen = ({route, navigation}) => {
           />
         </Pressable>
       </View>
-      {bookDetails && authorName && (
+      {!loading ? (
         <View style={styles.detailView}>
           {bookDetails?.covers?.length > 0 && (
             <Image
@@ -88,6 +92,7 @@ const BookDetailsScreen = ({route, navigation}) => {
               source={{
                 uri: `https://covers.openlibrary.org/b/id/${bookDetails.covers[0]}-L.jpg`,
               }}
+              resizeMode="cover"
             />
           )}
           <Text style={styles.bookTitle}>{bookDetails?.title}</Text>
@@ -107,6 +112,10 @@ const BookDetailsScreen = ({route, navigation}) => {
               </Text>
             </View>
           </ScrollView>
+        </View>
+      ) : (
+        <View style={styles.detailView}>
+          <Text>Loading...</Text>
         </View>
       )}
     </View>

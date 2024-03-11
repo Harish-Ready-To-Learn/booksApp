@@ -58,28 +58,36 @@ function FavoriteScreen({navigation}) {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <View>
-        <FlatList
-          data={bookList}
-          keyExtractor={(item, index) => index}
-          renderItem={({item, index}) => {
-            return (
-              <>
-                {item && (
-                  <BookListItem
-                    title={item?.title}
-                    authorName={item?.author_name[0]}
-                    key_id={item?.key}
-                    index={index}
-                    bookList={bookList}
-                    favorite_flag={item?.favorite_flag}
-                  />
-                )}
-              </>
-            );
-          }}
-        />
-      </View>
+      {bookList.length > 0 ? (
+        <View>
+          <FlatList
+            data={bookList}
+            keyExtractor={(item, index) => index}
+            renderItem={({item, index}) => {
+              return (
+                <>
+                  {item && (
+                    <BookListItem
+                      title={item?.title}
+                      authorName={item?.author_name[0]}
+                      key_id={item?.key}
+                      index={index}
+                      bookList={bookList}
+                      favorite_flag={item?.favorite_flag}
+                    />
+                  )}
+                </>
+              );
+            }}
+          />
+        </View>
+      ) : (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={{fontSize: 25, fontWeight: 'bold'}}>
+            No favorite List
+          </Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 }

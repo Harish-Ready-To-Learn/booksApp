@@ -1,6 +1,6 @@
-export async function getBooksList() {
+export async function getBooksList(text) {
   try {
-    let response = await fetch('https://openlibrary.org/search.json?q=hello');
+    let response = await fetch(`https://openlibrary.org/search.json?q=${text}`);
 
     let responseJSON = await response.json();
     return responseJSON;

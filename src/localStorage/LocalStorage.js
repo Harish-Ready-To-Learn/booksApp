@@ -3,7 +3,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export async function setFavoriteList(data) {
   var stringfy = '';
   try {
-    console.log('DTARAR', data);
     stringfy = JSON.stringify(data);
     await AsyncStorage.setItem('favoriteList', stringfy);
   } catch (error) {
