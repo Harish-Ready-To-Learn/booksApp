@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
     borderColor: '#fff',
     margin: 10,
     paddingHorizontal: 10,
+    borderRadius: 10,
   },
   searchTextInput: {
     flex: 1,
