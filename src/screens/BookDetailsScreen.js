@@ -16,12 +16,16 @@ import {
 } from '../constants/colors';
 import {BackArrow, FAVORITE_ICON, follow_select} from '../assets';
 import {getFavoriteList, setFavoriteList} from '../localStorage/LocalStorage';
+import {createShimmerPlaceholder} from 'react-native-shimmer-placeholder';
+import LinearGradient from 'react-native-linear-gradient';
 
 const BookDetailsScreen = ({route, navigation}) => {
   const [bookDetails, setBookDetails] = useState({});
   const [authorName, setAuthorName] = useState({});
   const [favoriteFlag, setFavoriteFlag] = useState(route.params.favorite_flag);
   const [loading, setLoading] = useState(true);
+  const [imageLoading, setImageLoading] = useState(true);
+  const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
   useEffect(() => {
     fetchBookDetails();
@@ -87,13 +91,29 @@ const BookDetailsScreen = ({route, navigation}) => {
       {!loading ? (
         <View style={styles.detailView}>
           {bookDetails?.covers?.length > 0 && (
-            <Image
-              style={styles.imageView}
-              source={{
-                uri: `https://covers.openlibrary.org/b/id/${bookDetails.covers[0]}-L.jpg`,
-              }}
-              resizeMode="cover"
-            />
+            <>
+              <Image
+                style={styles.imageView}
+                source={{
+                  uri: `https://covers.openlibrary.org/b/id/${bookDetails.covers[0]}-L.jpg`,
+                }}
+                resizeMode="cover"
+                onLoadStart={() => {
+                  console.log('started');
+                  setImageLoading(true);
+                }}
+                onLoadEnd={() => {
+                  console.log('started');
+                  setImageLoading(false);
+                }}
+              />
+              {imageLoading && (
+                <View style={{position: 'absolute'}}>
+                  <ShimmerPlaceHolder
+                    style={styles.imageView}></ShimmerPlaceHolder>
+                </View>
+              )}
+            </>
           )}
           <Text style={styles.bookTitle}>{bookDetails?.title}</Text>
           <Text style={styles.authorName}>
